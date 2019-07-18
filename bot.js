@@ -3,47 +3,62 @@ const Discord = require('discord.js');
 
 const client = new Discord.Client();
 
+const botId        = "600983903313985537";
+const mudamaidId   = "551329384783544321";
+const accompliceId = "139348983146479616";
+
 client.on('ready', () => {
     console.log(`Ready! (Username: ${client.user.username}, ID: ${client.user.id})`);
 });
 
 client.on('message', (message) => {
-    if (shouldCree(message)) {
-        message.channel.send(findCreeEmoji(message.guild));
+    const response = decideResponse(message);
+    if (response !== undefined) {
+        message.channel.send(response);
     }
 });
 
-/**
- * Returns true if the bot should CREE in response to the given message,
- * and false otherwise.
- * @param {Message} message - a Message object
- * @returns {boolean}
- */
-function shouldCree(message) {
-    return userCanTriggerCree(message.author) &&
-           messageContentCanTriggerCree(message.content);
+function decideResponse(message) {
+    if (badRoll(message)) {
+        return `${findCreeEmoji(message.guild)}`;
+    } else if (wonLegendary(message)) {
+        return `${findCreeEmoji(message.guild)} `.repeat(3);
+    } else if (creesAtMe(message)) {
+        return `${message.author} ${findCreeEmoji(message.guild)}`;
+    } else {
+        return undefined;
+    }
 }
 
 /**
- * Returns  true  if the bot is allowed to CREE in response to the given
- * user, and false otherwise.
- * @param {User} user - a User object
- * @returns {boolean}
+ * 
+ * @param {Message} message 
  */
-function userCanTriggerCree(user) {
-    return user.id === "551329384783544321" || // Mudae
-           user.id === "139348983146479616" || // Mudamaid 17
-           user.id === "139348983146479616"    // Me
+function badRoll(message) {
+    const regexp = /Congratulations.*nothing/;
+    return message.content.search(regexp) !== -1 &&
+           (message.author.id === mudamaidId ||
+           message.author.id === accompliceId);
 }
 
 /**
- * Returns  true if the given message content string can trigger a CREE,
- * and false otherwise. 
- * @param {string} content - the contents of a message
- * @returns {boolean}
+ * 
+ * @param {Message} message 
  */
-function messageContentCanTriggerCree(content) {
-    return content.match(/Congratulations.*nothing/) !== null;
+function wonLegendary(message) {
+    const regexp = /CASINO!!! COME BACK NOW!!!/;
+    return message.content.search(regexp) !== -1 &&
+           (message.author.id === mudamaidId ||
+           message.author.id === accompliceId);
+}
+
+/**
+ * 
+ * @param {Message} message 
+ */
+function creesAtMe(message) {
+    return message.content.search(findCreeEmoji(message.guild)) !== -1 &&
+           message.isMemberMentioned(client.user);
 }
 
 /**
