@@ -18,6 +18,12 @@ client.on('message', (message) => {
     }
 });
 
+/**
+ * Decides  a  response  to  the given message. Returns undefined if the
+ * bot should not respond.
+ * @param {Message} message 
+ * @returns {string}
+ */
 function decideResponse(message) {
     if (badRoll(message)) {
         return `${findCreeEmoji(message.guild)}`;
@@ -31,30 +37,34 @@ function decideResponse(message) {
 }
 
 /**
- * 
+ * Returns  true  if the message says someone won nothing from the roll,
+ * and false otherwise.
  * @param {Message} message 
+ * @returns {boolean}
  */
 function badRoll(message) {
     const regexp = /Congratulations.*nothing/;
     return message.content.search(regexp) !== -1 &&
-           (message.author.id === mudamaidId ||
-           message.author.id === accompliceId);
+           message.author.id === mudamaidId;
 }
 
 /**
- * 
+ * Returns  true  if the message says someone won a legendary, and false
+ * otherwise.
  * @param {Message} message 
+ * @returns {boolean}
  */
 function wonLegendary(message) {
     const regexp = /CASINO!!! COME BACK NOW!!!/;
     return message.content.search(regexp) !== -1 &&
-           (message.author.id === mudamaidId ||
-           message.author.id === accompliceId);
+           message.author.id === mudamaidId;
 }
 
 /**
- * 
+ * Returns  true if the message contains the cree emote and mentions the
+ * bot, and false otherwise.
  * @param {Message} message 
+ * @returns {boolean}
  */
 function creesAtMe(message) {
     return message.content.search(findCreeEmoji(message.guild)) !== -1 &&
