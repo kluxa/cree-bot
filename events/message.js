@@ -12,7 +12,7 @@ module.exports = (client, message) => {
 	
 	if (message.channel.type == "dm") {
 		// console.log(`Received DM: ${message.content}`);
-		cree(client, message);
+		// cree(client, message);
 	
 	} else if (words[0] === "$cree") {
 		cree(client, message);
