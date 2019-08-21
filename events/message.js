@@ -8,11 +8,13 @@ const accompliceId = "139348983146479616";
 testChannelId      = "589326521840173056";
 
 module.exports = (client, message) => {
+    if (message.author.bot) return;
+
 	words = message.content.split(/\s+/);
 	
 	if (message.channel.type == "dm") {
 		// console.log(`Received DM: ${message.content}`);
-		// cree(client, message);
+		cree(client, message);
 	
 	} else if (words[0] === "$cree") {
 		cree(client, message);
