@@ -1,14 +1,16 @@
 
+const Discord = require('discord.js');
+
 const cree = require('../commands/cree');
 
-const botId        = "600983903313985537";
-const mudamaidId   = "551329384783544321";
-const accompliceId = "139348983146479616";
+const botId         = "600983903313985537";
+const mudamaidId    = "551329384783544321";
+const accompliceId  = "139348983146479616";
 
-testChannelId      = "589326521840173056";
+const testChannelId = "589326521840173056";
 
 module.exports = (client, message) => {
-    if (message.author.bot) return;
+    if (message.author.id === botId) return;
 
 	words = message.content.split(/\s+/);
 	
@@ -30,8 +32,8 @@ module.exports = (client, message) => {
 /**
  * Decides  a  response  to  the given message. Returns undefined if the
  * bot should not respond.
- * @param {Client} client
- * @param {Message} message 
+ * @param {Discord.Client} client
+ * @param {Discord.Message} message 
  * @returns {string}
  */
 function decideResponse(client, message) {
@@ -49,7 +51,7 @@ function decideResponse(client, message) {
 /**
  * Returns  true  if the message says someone won nothing from the roll,
  * and false otherwise.
- * @param {Message} message 
+ * @param {Discord.Message} message 
  * @returns {boolean}
  */
 function badRoll(message) {
@@ -61,7 +63,7 @@ function badRoll(message) {
 /**
  * Returns  true  if the message says someone won a legendary, and false
  * otherwise.
- * @param {Message} message 
+ * @param {Discord.Message} message 
  * @returns {boolean}
  */
 function wonLegendary(message) {
@@ -73,8 +75,8 @@ function wonLegendary(message) {
 /**
  * Returns  true if the message contains the cree emote and mentions the
  * bot, and false otherwise.
- * @param {Client} client
- * @param {Message} message 
+ * @param {Discord.Client} client
+ * @param {Discord.Message} message 
  * @returns {boolean}
  */
 function creesAtMe(client, message) {
@@ -84,7 +86,7 @@ function creesAtMe(client, message) {
 
 /**
  * Checks if the given guild has a cree emoji
- * @param {Guild} guild
+ * @param {Discord.Guild} guild
  * @returns {string} the guild's cree emoji as a string if it exists, or
  *                   the string "CREE" otherwise.
  */
@@ -97,6 +99,10 @@ function findCreeEmoji(guild) {
     }
 }
 
+/**
+ * Checks if the given user is authorised
+ * @param {Discord.User} user 
+ */
 function isAuthorised(user) {
     return user.id === mudamaidId ||
            user.id === accompliceId;

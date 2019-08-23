@@ -14,9 +14,3 @@ fs.readdir('./events', (err, files) => {
 });
 
 client.login(process.env.BOT_TOKEN);
-
-/*
-client.on('message', (message) => {
-    message.author
-});
-// */
