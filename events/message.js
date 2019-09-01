@@ -1,25 +1,29 @@
 
 const Discord = require('discord.js');
 
-const cree = require('../commands/cree');
+const handleTestMessage = require('../commands/test');
 
-const botId         = "600983903313985537";
-const mudamaidId    = "551329384783544321";
-const accompliceId  = "139348983146479616";
+const findCreeEmoji = require('../lib/guild/findCreeEmoji');
 
-const testChannelId = "589326521840173056";
+const badRoll = require('../lib/message/badRoll');
+const wonLegendary = require('../lib/message/wonLegendary');
 
-module.exports = (client, message) => {
-    if (message.author.id === botId) return;
+/**
+ * Handles a new message
+ * @param {Discord.Client} client 
+ * @param {Discord.Message} message 
+ */
+const handleMessage = (client, message) => {
+    // Ignore messages from self
+    if (client.user.id === message.author.id) return;
 
 	words = message.content.split(/\s+/);
 	
 	if (message.channel.type == "dm") {
-		// console.log(`Received DM: ${message.content}`);
-		cree(client, message);
+        // ignore DMs for now
 	
-	} else if (words[0] === "$cree") {
-		cree(client, message);
+	} else if (words[0] === "$test") {
+        handleTestMessage(message);
 
 	} else {
 		const response = decideResponse(client, message);
@@ -30,8 +34,8 @@ module.exports = (client, message) => {
 };
 
 /**
- * Decides  a  response  to  the given message. Returns undefined if the
- * bot should not respond.
+ * Decides a response to the given message. Returns undefined if the bot
+ * should not respond.
  * @param {Discord.Client} client
  * @param {Discord.Message} message 
  * @returns {string}
@@ -49,30 +53,6 @@ function decideResponse(client, message) {
 }
 
 /**
- * Returns  true  if the message says someone won nothing from the roll,
- * and false otherwise.
- * @param {Discord.Message} message 
- * @returns {boolean}
- */
-function badRoll(message) {
-    const regexp = /Congratulations.*nothing/;
-    return message.content.search(regexp) !== -1 &&
-           isAuthorised(message.author);
-}
-
-/**
- * Returns  true  if the message says someone won a legendary, and false
- * otherwise.
- * @param {Discord.Message} message 
- * @returns {boolean}
- */
-function wonLegendary(message) {
-    const regexp = /CASINO!!! COME BACK NOW!!!/;
-    return message.content.search(regexp) !== -1 &&
-           isAuthorised(message.author);
-}
-
-/**
  * Returns  true if the message contains the cree emote and mentions the
  * bot, and false otherwise.
  * @param {Discord.Client} client
@@ -84,26 +64,4 @@ function creesAtMe(client, message) {
            message.isMemberMentioned(client.user);
 }
 
-/**
- * Checks if the given guild has a cree emoji
- * @param {Discord.Guild} guild
- * @returns {string} the guild's cree emoji as a string if it exists, or
- *                   the string "CREE" otherwise.
- */
-function findCreeEmoji(guild) {
-    const emoji = guild.emojis.find(emoji => emoji.name === "cree");
-    if (emoji !== null) {
-        return `<:${emoji.identifier}>`
-    } else {
-        return "CREE"
-    }
-}
-
-/**
- * Checks if the given user is authorised
- * @param {Discord.User} user 
- */
-function isAuthorised(user) {
-    return user.id === mudamaidId ||
-           user.id === accompliceId;
-}
+module.exports = handleMessage;
