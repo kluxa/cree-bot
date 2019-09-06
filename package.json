@@ -9,10 +9,11 @@
 	"dependencies": {
 		"discord.js": "^11.5.1",
 		"locks": "^0.2.2",
+		"moment": "^2.24.0",
 		"mongodb": "^3.3.2"
 	},
 	"devDependencies": {
 		"dotenv": "^8.1.0",
-		"nodemon": "^1.19.1"
+		"nodemon": "^1.19.2"
 	}
 }

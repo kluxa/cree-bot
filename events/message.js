@@ -1,15 +1,16 @@
 
 const Discord = require('discord.js');
 
-const scanPokerollMessages = require('../commands/scan');
-const handleTestMessage = require('../commands/test');
+const db = require('../database/database');
+
+const handleCommand = require('../commands/handleCommand');
 
 const findCreeEmoji = require('../lib/guild/findCreeEmoji');
 
 const badRoll = require('../lib/message/badRoll');
+const isPokerollMessage = require('../lib/message/isPokerollMessage');
+const parsePokeroll = require('../lib/message/parsePokeroll');
 const wonLegendary = require('../lib/message/wonLegendary');
-
-const isAuthorised = require('../lib/user/isAuthorised');
 
 /**
  * Handles a new message
@@ -20,20 +21,18 @@ const handleMessage = (client, message) => {
 	// Ignore messages from self
 	if (client.user.id === message.author.id) return;
 
-	words = message.content.split(/\s+/);
-	
 	if (message.channel.type == "dm") {
 		// ignore DMs for now
 	
-	} else if (words[0] === "$scan") {
-		if (isAuthorised(message.author)) {
-			scanPokerollMessages(client, message);
-		}
-
-	} else if (words[0] === "$test") {
-		handleTestMessage(message);
+	// If a message starts with '$$', treat it as a command
+	} else if (message.content.startsWith("$$")) {
+		handleCommand(client, message);
 
 	} else {
+		if (isPokerollMessage(message)) {
+			console.log("[handleMessage] saving Pokeroll message...");
+			db.insertPokerolls(message.guild.id, parsePokeroll(message));
+		}
 		const response = decideResponse(client, message);
 		if (response !== undefined) {
 			message.channel.send(response);
@@ -46,7 +45,7 @@ const handleMessage = (client, message) => {
  * should not respond.
  * @param {Discord.Client} client
  * @param {Discord.Message} message 
- * @returns {string}
+ * @returns {(string|undefined)}
  */
 function decideResponse(client, message) {
 	if (badRoll(message)) {
