@@ -315,11 +315,7 @@ class Database {
 			this.db.collection('guilds').aggregate([
 				{ '$match': { 'guildId': guildId } },
 				{ '$unwind': '$pokerolls' },
-				{ '$match':
-					{
-						'pokerolls.pokemon': { '$elemMatch': { 'rarity': rarity } },
-					}
-				},
+				{ '$match': { 'pokerolls.pokemon': { '$elemMatch': { 'rarity': rarity } } } },
 				{ '$group': { '_id': '$pokerolls.userId', 'count': { '$sum': 1 } } },
 			]).toArray().then(res =>
 				res.reduce((map, obj) => (map.set(obj._id, obj.count), map), new Map())
@@ -344,6 +340,53 @@ class Database {
 				{ '$group': { '_id': '$pokerolls.pokemon.rarity', 'count': { '$sum': 1 } } },
 			]).toArray().then(res =>
 				res.reduce((map, obj) => (map.set(obj._id, obj.count), map), new Map())	
+			)
+		);
+	}
+
+	////////////////////
+	// Quantity Counts
+
+	/**
+	 * Gets  the  number  of  times  a  user has won a certain number of
+	 * Pokemon from a Pokeroll.
+	 * @param {string} guildId 
+	 * @param {string} userId 
+	 * @param {number} quantity 
+	 * @returns {Promise<number>}
+	 */
+	getUserQuantityCount(guildId, userId, quantity) {
+		return this.query(() =>
+			this.db.collection('guilds').aggregate([
+				{ '$match': { 'guildId': guildId } },
+				{ '$unwind': '$pokerolls' },
+				{ '$match': {
+					'pokerolls.userId': userId,
+					'pokerolls.pokemon': { '$size': quantity }
+				} },
+				{ '$count': 'count' }
+			]).toArray().then(res =>
+				res.length === 0 ? 0 : res[0].count
+			)
+		);
+	}
+
+	/**
+	 * Gets the number of times each user on the guild has won a certain
+	 * number of Pokemon from a Pokeroll.
+	 * @param {string} guildId 
+	 * @param {number} quantity 
+	 * @returns {Promise<Map<string, number>>}
+	 */
+	getAllUsersQuantityCount(guildId, quantity) {
+		return this.query(() =>
+			this.db.collection('guilds').aggregate([
+				{ '$match': { 'guildId': guildId } },
+				{ '$unwind': '$pokerolls' },
+				{ '$match': { 'pokerolls.pokemon': { '$size': quantity } } },
+				{ '$group': { '_id': '$pokerolls.userId', 'count': { '$sum': 1 } } },
+			]).toArray().then(res =>
+				res.reduce((map, obj) => (map.set(obj._id, obj.count), map), new Map())
 			)
 		);
 	}

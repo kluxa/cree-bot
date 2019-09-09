@@ -5,11 +5,13 @@ const Locks = require('locks');
 const help = require('./help');
 const nothingRate = require('./nothingRate');
 const nothingRateRank = require('./nothingRateRank');
+const quantityRate = require('./quantityRate');
+const quantityRateRank = require('./quantityRateRank');
+const pokerollProfile = require('./pokerollProfile');
 const rarityRate = require('./rarityRate');
 const rarityRateRank = require('./rarityRateRank');
 const rollCount = require('./rollCount');
 const rollCountRank = require('./rollCountRank');
-const pokerollProfile = require('./pokerollProfile');
 const topPokemon = require('./topPokemon');
 const topPokemonServer = require('./topPokemonServer');
 
@@ -48,6 +50,14 @@ const handleCommand = (client, message) => {
 		case "$$pp":
 		case "$$pprofile":
 			cmd = () => pokerollProfile(client, message, args);  break;
+		
+		case "$$qr":
+		case "$$quantityrate":
+			cmd = () => quantityRate(client, message, args);     break;
+		
+		case "$$qrr":
+		case "$$quantityraterank":
+			cmd = () => quantityRateRank(client, message, args); break;
 
 		case "$$rc":
 		case "$$rollcount":

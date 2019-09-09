@@ -46,7 +46,7 @@ const parseArgs = (message, args) => {
  * @param {(Discord.TextChannel|Discord.DMChannel|Discord.GroupDMChannel)} channel 
  */
 const usage = (channel) => {
-	return channel.send("Usage: <$rarityrate|$$rr> <1|2|3|4|5> [user (optional)]");
+	return channel.send("Usage: <$$rarityrate|$$rr> <1|2|3|4|5> [user (optional)]");
 }
 
 /**
