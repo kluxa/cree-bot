@@ -127,7 +127,7 @@ async function scrapeChannel(channel, start, end) {
 			}
 		}
 
-		if (++count % 100 == 0) {
+		if (++count % 10 == 0) {
 			console.log(`[scrapeChannel] searched ${100 * count} ` +
 						`messages, date of latest message is ` +
 						`${upTo.toString()}`);
@@ -136,6 +136,9 @@ async function scrapeChannel(channel, start, end) {
 		if (upTo > end || msgCollection.size == 0) break;
 		upTo = new Date(upTo.getTime() + 1);
 	}
+
+	console.log(`[scrapeChannel] done, date of last message was `  +
+	            `${upTo.toString()}`);
 
 	return pokerolls;
 }

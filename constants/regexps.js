@@ -1,6 +1,6 @@
 
 module.exports = {
-	0: /uncommon nothing/,
+	0: /Congratulations, you won an uncommon nothing/,
 	1: /You won a <.*?> \*\*(.*?)\*\*/,
 	2: /That's better: you got an uncommon <.*?> \*\*(.*?)\*\*/,
 	3: /Oh, it's rare: you just won <.*?> \*\*(.*?)\*\*/,

@@ -34,6 +34,7 @@ async function catchupTo(client, end) {
 		const guildInfo = await db.getGuildInformation(guild.id);
 		const channelId = guild.channels.get(guildInfo.pokerollChannelId);
 		const startDate = new Date(guildInfo.lastUpdated.getTime() + 1);
+		console.log(`Catching up since ${startDate}`);
 
 		// @ts-ignore (ignore warnings about TextChannel)
 		const pokerolls = await scrapeChannel(channelId,
