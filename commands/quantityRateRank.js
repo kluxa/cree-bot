@@ -15,8 +15,8 @@ const parseArgs = (args) => {
 		return undefined;
 	}
 
-	const rarity = parseInt(args[0]);
-	return (isNaN(rarity) || rarity < 1 || rarity > 5 ? undefined : rarity);
+	const quantity = parseInt(args[0]);
+	return (isNaN(quantity) || quantity < 0 || quantity > 5 ? undefined : quantity);
 };
 
 /**
@@ -24,7 +24,7 @@ const parseArgs = (args) => {
  * @param {Discord.TextChannel|Discord.DMChannel|Discord.GroupDMChannel} channel 
  */
 const usage = (channel) => {
-	return channel.send("Usage: <$$quantityraterank|$$qrr> <0|1|2|3|4|5>");
+	return channel.send("Usage: $$quantityraterank|$$qrr <0-5>");
 }
 
 /**

@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const Locks = require('locks');
 
 const help = require('./help');
+const lastRarityTime = require('./lastRarityTime');
 const nothingRate = require('./nothingRate');
 const nothingRateRank = require('./nothingRateRank');
 const quantityRate = require('./quantityRate');
@@ -38,6 +39,9 @@ const handleCommand = (client, message) => {
 		case "$$h":
 		case "$$help":
 			cmd = () => help(client, message, args);             break;
+
+		case "$$lr":
+			cmd = () => lastRarityTime(client, message, args);   break;
 
 		case "$$nr":
 		case "$$nothingrate":

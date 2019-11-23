@@ -344,6 +344,34 @@ class Database {
 		);
 	}
 
+	//////////////
+	// Last Time
+
+	/**
+	 * Gets the last time a user in a guild has won a Pokemon of a given
+	 * rarity.
+	 * @param {string} guildId 
+	 * @param {string} userId 
+	 * @param {number} rarity
+	 */
+	getLastRarityTime(guildId, userId, rarity) {
+		return this.query(() =>
+			this.db.collection('guilds').aggregate([
+				{ '$match': { 'guildId': guildId } },
+				{ '$unwind': '$pokerolls' },
+				{ '$match':
+					{
+						'pokerolls.userId': userId,
+						'pokerolls.pokemon': { '$elemMatch': { 'rarity': rarity } },
+					}
+				},
+				{ '$sort': { 'pokerolls.timestamp': -1 } },
+				{ '$project': { 'latestTime': '$pokerolls.timestamp' } },
+				{ '$limit': 1 },
+			]).toArray().then(res => res.length === 0 ? null : res[0].latestTime)
+		);
+	}
+
 	////////////////////
 	// Quantity Counts
 

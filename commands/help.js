@@ -10,6 +10,7 @@ const Discord = require('discord.js');
 const help = (client, message, args) => {
 	return message.channel.send(
 		'**$$h** - show this help message\n' +
+		'**$$lr <rarity (1-5)> [user (optional)]** - when did you last win a Pokemon of a particular rarity?\n' +
 		'**$$nr [user (optional)]** - find out how often you have won nothing\n' +
 		'**$$nrr** - how good are you at winning nothing compared to other guild members?\n' +
 		'**$$pp [user (optional)]** - Pokéroll profile\n' +
